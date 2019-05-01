@@ -62,6 +62,17 @@ userSchema.methods.generateAuthToken = async function() {
   return token;
 };
 
+//toJSON is called before it is stringified
+userSchema.methods.toJSON = function() {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.password;
+  delete userObject.tokens;
+
+  return userObject;
+};
+
 //available on model
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
@@ -84,6 +95,7 @@ userSchema.pre("save", async function(next) {
   const user = this;
 
   if (user.isModified("password")) {
+    console.log("changed!");
     user.password = await bcrypt.hash(user.password, 8);
   }
   next();
