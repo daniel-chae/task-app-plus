@@ -22,37 +22,17 @@ app.listen(port, () => {
   console.log("Server is up on port " + port);
 });
 
-// const jwt = require("jsonwebtoken");
+// const Task = require("./models/task");
+// const User = require("./models/user");
 
-// const myFunction = async () => {
-//   const token = jwt.sign({ _id: "abc123" }, "thisismynewcourse", {
-//     expiresIn: "0 seconds"
-//   });
-//   console.log(token);
+// const main = async () => {
+//   // const task = await Task.findById("5cc95ca83153f0b817c0eaeb");
+//   // await task.populate('owner').execPopulate() //populate the mentioned field with full data
+//   // console.log(task.owner);
 
-//   const data = jwt.verify(token, "thisismynewcourse");
-//   console.log(data);
+//   const user = await User.findById("5cc95bbc0ea7d0b517f477ed");
+//   await user.populate("tasks").execPopulate();
+//   console.log(user.tasks);
 // };
 
-// myFunction();
-
-//How to use bcrypt
-// require bcryptjs
-// const bcrypt = require("bcryptjs");
-
-// const myFunction = async () => {
-
-//   const password = "Red12345!";
-
-//   hash the password
-//   const hashedPassword = await bcrypt.hash(password, 8);
-
-//   console.log(password);
-//   console.log(hashedPassword);
-
-//   check the matching between string and hassed password
-//   const isMatch = await bcrypt.compare("Red12345", hashedPassword);
-//   console.log(isMatch);
-// };
-
-// myFunction();
+// main();
