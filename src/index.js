@@ -17,22 +17,7 @@ const taskRouter = require("./routers/task");
 app.use(taskRouter);
 
 //define port for heroku or dev environment and listen to it
-const port = process.env.port || 3000;
+const port = process.env.PORT;
 app.listen(port, () => {
   console.log("Server is up on port " + port);
 });
-
-// const Task = require("./models/task");
-// const User = require("./models/user");
-
-// const main = async () => {
-//   // const task = await Task.findById("5cc95ca83153f0b817c0eaeb");
-//   // await task.populate('owner').execPopulate() //populate the mentioned field with full data
-//   // console.log(task.owner);
-
-//   const user = await User.findById("5cc95bbc0ea7d0b517f477ed");
-//   await user.populate("tasks").execPopulate();
-//   console.log(user.tasks);
-// };
-
-// main();

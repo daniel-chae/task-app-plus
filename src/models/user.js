@@ -3,6 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Task = require("./task");
+const { sendCancelEmail } = require("../emails/account");
 
 const userSchema = new mongoose.Schema(
   {
@@ -43,6 +44,9 @@ const userSchema = new mongoose.Schema(
         }
       }
     },
+    avatar: {
+      type: Buffer
+    },
     tokens: [
       {
         token: {
@@ -76,9 +80,10 @@ userSchema.virtual("tasks", {
 //available on instance
 userSchema.methods.generateAuthToken = async function() {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, "thisismynewskill");
+  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
 
-  user.tokens = user.tokens.concat({ token });
+  // user.tokens = user.tokens.concat({ token });
+  user.tokens = [...user.tokens, { token }];
   await user.save();
 
   return token;
@@ -91,6 +96,7 @@ userSchema.methods.toJSON = function() {
 
   delete userObject.password;
   delete userObject.tokens;
+  delete userObject.avatar;
 
   return userObject;
 };
@@ -126,6 +132,11 @@ userSchema.pre("remove", async function(next) {
   const user = this;
   await Task.deleteMany({ owner: user._id });
   next();
+});
+
+userSchema.post("remove", function(doc) {
+  const user = this;
+  sendCancelEmail(user.email, user.name);
 });
 
 const User = mongoose.model("User", userSchema);
